@@ -1,0 +1,6 @@
+application:
+  security:
+    jwt:
+      secret: whifa3452efwihn15ajkdvawuocnawclejhfgrow84afwjenoh43829r2huifnjkae
+      expiration: 10800
+      refresh: 75600
