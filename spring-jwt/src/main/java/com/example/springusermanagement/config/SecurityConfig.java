@@ -43,8 +43,8 @@ public class SecurityConfig {
                 // 회원가입, 로그인의 경우 별도의 인증 없이 접근할 수 있도록 허용
                 .authorizeHttpRequests(authorizeRequests ->
                         authorizeRequests
-                                .requestMatchers("/api/authenticate").permitAll() // 로그인 허용
-                                .requestMatchers("/api/signup").permitAll() // 회원가입 허용
+                                .requestMatchers("/api/v1/auth/authenticate").permitAll() // 로그인 허용
+                                .requestMatchers("/api/v1/auth.register").permitAll() // 회원가입 허용
                                 .anyRequest().authenticated()
                 );
 
