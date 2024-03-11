@@ -52,6 +52,12 @@ public class JWTService {
         return buildToken(extraClaims, userDetails, Long.parseLong("${application.security.jwt.expiration}"));
     }
 
+    public String generateRefreshToken(
+            UserDetails userDetails
+    ) {
+        return buildToken(new HashMap<>(), userDetails, Long.parseLong("${application.security.jwt.expiration}"));
+    }
+
     // JWT 토큰 생성
     private String buildToken(
             Map<String, Object> extraClaims,
