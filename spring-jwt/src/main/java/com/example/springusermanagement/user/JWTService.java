@@ -5,6 +5,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -16,12 +17,18 @@ import java.util.function.Function;
 
 @Service
 public class JWTService {
+    @Value("${application.security.jwt.secret}")
+    private String jwtSecret;
+
+    @Value("${application.security.jwt.expiration}")
+    private String jwtExpiration;
+
     public String extractUsername(String token) {
         return null;
     }
 
     private Key getSignInKey() {
-        byte[] keyByte = Decoders.BASE64.decode("${application.security.jwt.secret}");
+        byte[] keyByte = Decoders.BASE64.decode(jwtSecret);
         return Keys.hmacShaKeyFor(keyByte);
     }
 
@@ -49,13 +56,13 @@ public class JWTService {
             Map<String, Object> extraClaims,
             UserDetails userDetails
     ) {
-        return buildToken(extraClaims, userDetails, Long.parseLong("${application.security.jwt.expiration}"));
+        return buildToken(extraClaims, userDetails, Long.parseLong(jwtExpiration));
     }
 
     public String generateRefreshToken(
             UserDetails userDetails
     ) {
-        return buildToken(new HashMap<>(), userDetails, Long.parseLong("${application.security.jwt.expiration}"));
+        return buildToken(new HashMap<>(), userDetails, Long.parseLong(jwtExpiration));
     }
 
     // JWT 토큰 생성
