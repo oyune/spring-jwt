@@ -1,9 +1,41 @@
 # Spring-boot에서의 JWT 사용
 Spring Boot에서 JWT를 사용하는 방법에 대한 레포지토리입니다.
 
-# 의존성 및 플러그인 추가
+# JWT
 
-## build.gradle
+## JWT 구성
+
+- Header
+    - typ: 토큰의 타입을 지정한다.
+    - alg: signature를 해싱하기 위한 알고리즘을 저장한다.
+- Payload
+    - Registered Claim: 토큰에 대한 정보를 담는다.
+    - Public Claim: 사용자 정의 클레임으로, 시스템에 필요한 정보를 담는다.
+    - Private Claim: 시스템에 필요한 정보 중 특정 도메인에서만 필요한 정보를 담는다.
+- Signature
+    - 헤더와 페이로드의 내용이 유효하고 변조되지 않았음을 검증한다.
+
+## 구현 과정
+
+1. 서버가 클라이언트에게 사용자의 로그인 정보를 요청받는다.
+2. 해당 사용자의 정보를 검증한다.
+3. **Header**를 생성한다:
+”typ”과 “alg”을 JSON 형식으로 작성한다.
+4. **Payload**를 생성한다:
+사용자 ID, 권한 등의 클레임을 페이로드에 담는다.
+5. 헤더와 페이로드를 Base64로 인코딩한다.
+6. **Signature**을 생성한다:
+7. 헤더와 페이로드를 인코딩한 값에 지정된 알고리즘과 비밀 키를 사용하여 해싱한 값을 저장한다.
+8. **JWT**를 생성한다:
+생성된 헤더, 페이로드, 서명을 조합하여 JWT를 생성한다. 각 부분은 .으로 구분되어 하나의 문자열로 합쳐진다.
+9. **JWT**를 클라이언트에게 반환한다:
+클라이언트는 이후 요청에 이 JWT를 포함하여 서버에 전달한다.
+
+# 구현하기
+
+## 의존성 및 플러그인 추가
+
+### build.gradle
 
 ```gradle
 dependencies {
@@ -21,7 +53,7 @@ dependencies {
 - `jjwt-impl`: jjwt-api의 구현체를 포함하고 있어 jjwt-api의 인터페이스를 구현하여 실제 JWT를 생성하고 파싱하는 기능을 제공한다.
 - `jjwt-jackson`: Jackson 라이브러리를 사용하여 JWT를 JSON 형식으로 변환하는데 사용된다.
 
-## application.yaml
+### application.yaml
 
 ```yaml
 application:
@@ -39,11 +71,7 @@ application:
 - `expiration`: access token의 만료시간으로 초단위로 표기한다.
 - `refresh`: refresh token의 만료시간으로 초단위로 표기한다.
 
-# UserEntity 
-
-# UserRepository
-
-# JWTAuthenticationFilter
+## JWTAuthenticationFilter
 
 ```java
 @Component
